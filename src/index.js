@@ -6,6 +6,7 @@ import * as GUI from './graphics.js';
 // DOM variables
 const projectsContainer = document.getElementById('projects-container');
 const individualProjectContainer = document.getElementById('individual-project-container');
+const homeBtn = document.getElementById('quehacer');
 
 // Function calling
 window.addEventListener('load', (event) => {
@@ -29,12 +30,15 @@ window.addEventListener('load', (event) => {
     });
 });
 
-
-
 projectsContainer.addEventListener('click', (event) => {
     if(event.target.className === "project-card"){
         GUI.goToProject(LogicalController.getProjects(), event.target.id, projectsContainer, individualProjectContainer);
     }
+    if(event.target.id === 'new-project'){
+        GUI.addProjectsForm();
+    }
 });
 
-
+homeBtn.addEventListener('click', () => {
+    GUI.returnToProjects(LogicalController.getProjects(), projectsContainer, individualProjectContainer, homeBtn);
+});

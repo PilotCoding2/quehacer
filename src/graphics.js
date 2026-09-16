@@ -1,3 +1,4 @@
+// this function opens a form to add new projects to the projects array
 export const addProjectsForm = () => {
     if(document.querySelector('.form')){
         return;
@@ -18,8 +19,9 @@ export const addProjectsForm = () => {
     document.body.appendChild(formBody);
 }
 
+// t
 export const removeProjectsForm = (form) => {
-    form.remove()
+    form.remove();
 }
 
 export const paintProjects = (projectsContainer, projects) => {
@@ -56,6 +58,10 @@ export const goToProject = (projectsArray, projectId, projectsContainer = projec
         projectsContainer.innerHTML = '';
         individualProjectContainer.innerHTML = '';
         individualProjectContainer.innerHTML += `<button id="create-task">New Task</button>`
+        individualProjectContainer.innerHTML += `<h2 id="project-name">${project.name}</h2>`
+        if(project.description){
+            individualProjectContainer.innerHTML += `<p id="project-description">${project.description}</p>`
+        }
         if(!project.todo){
             individualProjectContainer.innerHTML += '';
         } else {
@@ -69,8 +75,14 @@ export const goToProject = (projectsArray, projectId, projectsContainer = projec
                 </div>
                 `
             });
-
         }
-       
     }
+}
+
+export const returnToProjects = (projectsArray, projectsContainer, individualProjectContainer, homeBtn) => {
+    if(!individualProjectContainer){
+        return;
+    }
+    individualProjectContainer.innerHTML = '';
+    paintProjects(projectsContainer, projectsArray);
 }
