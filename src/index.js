@@ -1,25 +1,33 @@
 import "./styles.css";
-import { displayHome, displayMenu, displayAbout } from "./utilities.js";
 
-// We declare variables that store the DOM elements
-const homeBtn = document.getElementById('home');
-const menuBtn = document.getElementById('menu');
-const aboutBtn = document.getElementById('about');
-const content = document.getElementById('content');
+import * as LogicalController from "./logic.js";
+import * as GUI from './graphics.js';
 
-// When the website loads, we set the home button as the default page
-window.addEventListener('load', () => {
-    displayHome(homeBtn, content);
+// DOM variables
+const newProjectBtn = document.getElementById('new-project');
+const projectsContainer = document.getElementById('projects-container');
+
+// Function calling
+window.addEventListener('load', (event) => {
+    event.preventDefault();
+    GUI.paintProjects(projectsContainer, LogicalController.getProjects());
+})
+
+newProjectBtn.addEventListener('click', () => {
+    GUI.addProjectsForm();
+
+    const projectCreationForm = document.getElementById('project-creation-form');
+    const projectName = document.getElementById('name');
+    const projectDesc = document.getElementById('description');
+    const formContainer = document.querySelector('form');
+
+    projectCreationForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        LogicalController.newProject(projectName.value, projectDesc.value);
+        GUI.removeProjectsForm(formContainer);
+        GUI.paintProjects(projectsContainer, LogicalController.getProjects());
+    });
 });
 
-homeBtn.addEventListener('click', () => {
-    displayHome(homeBtn, content);
-});
 
-menuBtn.addEventListener('click', () => {
-    displayMenu(menuBtn, content)
-});
 
-aboutBtn.addEventListener('click', () => {
-    displayAbout(aboutBtn, content);
-});
