@@ -10,46 +10,41 @@ export const addProjectsForm = () => {
     <form id="project-creation-form">
     <h3>Let's build a project</h3>
         <label for="name">Project name:</label>
-        <input type="text" id="name" required>
+        <input type="text" id="name" name="project-name" required>
         <label for="description">What's this project about?</label>
-        <input type="text" id="description">
+        <input type="text" id="description" name="project-desc">
         <input type="submit" id="create-project" value="Let's go">
     </form>
     `;
     document.body.appendChild(formBody);
 }
 
-// t
+// this function allows to remove the project creation form
 export const removeProjectsForm = (form) => {
     form.remove();
 }
 
+// this function allows to 'paint' the projects each time a project is added or modified
 export const paintProjects = (projectsContainer, projects) => {
     
     projectsContainer.innerHTML = '';
     projectsContainer.innerHTML += `<button id="new-project">Add Project</button>`
     projects.forEach(project => {
-        if(project.description){
-            projectsContainer.innerHTML += 
-            `
-            <div id="${project.id}" class="project-card">
-                <h2 class="project-title">${project.name}</h2>
-                <p class="project-desc">${project.description}</p>
-            </div>
-            `
-        }
-
         projectsContainer.innerHTML += 
         `
         <div id="${project.id}" class="project-card">
             <h2 class="project-title">${project.name}</h2>
+            ${project.description ? `<p class="project-desc">${project.description}</p>` : ''}
+            <button class="edit-project">Edit</button>
+            <button class="delete-project">Delete</button>
         </div>
         `
     });
 }
 
+// this function allows to go to the project details each time they're clicked
 export const goToProject = (projectsArray, projectId, projectsContainer = projectsContainer, individualProjectContainer) => {
-    if(document.querySelector('.form')){
+    if(document.querySelector('.form') || document.querySelector('.accept-btn')){
         return;
     }
     projectsContainer.innerHTML = '';
@@ -79,10 +74,55 @@ export const goToProject = (projectsArray, projectId, projectsContainer = projec
     }
 }
 
-export const returnToProjects = (projectsArray, projectsContainer, individualProjectContainer, homeBtn) => {
+// this function allows to go back to the projects area
+export const returnToProjects = (projectsArray, projectsContainer, individualProjectContainer) => {
     if(!individualProjectContainer){
         return;
     }
     individualProjectContainer.innerHTML = '';
     paintProjects(projectsContainer, projectsArray);
 }
+
+// this function allows to modify the project area
+export const modifyProject = (projects, projectId, projectTitle, projectDescription, editBtn, deleteBtn) => {
+    // removes the edit and delete project buttons
+    editBtn.remove();
+    deleteBtn.remove();
+    // creates an accept button
+    const projectCard = document.getElementById(`${projectId}`);
+    const acceptBtn = document.createElement('button');
+    acceptBtn.classList.add('accept-btn');
+    acceptBtn.textContent= 'Accept';
+    projectCard.appendChild(acceptBtn);
+    // creates a cancel button
+    const cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('cancel-btn');
+    cancelBtn.textContent = 'Cancel';
+    projectCard.appendChild(cancelBtn);
+
+    // filters the project
+    const project = projects.find(p => p.id === projectId);
+    if(project){
+        // convert the h2 title into an input
+        const title = projectTitle;
+        const titleInput = document.createElement('input');
+        titleInput.id = `title-${projectId}`;
+        titleInput.value = title.textContent;
+        title.replaceWith(titleInput);
+        // convert the description p into an input
+        const description = projectDescription;
+        const descriptionInput = document.createElement('input');
+        descriptionInput.id = `desc-${projectId}`;
+        if(description){
+            descriptionInput.value = projectDescription.textContent;
+            description.replaceWith(descriptionInput);
+        } else {
+            descriptionInput.value = '';
+            titleInput.after(descriptionInput);
+        }
+    }
+}
+
+// this function allows to modify the project name and description
+
+

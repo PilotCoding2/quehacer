@@ -24,10 +24,11 @@ export const newProject = (name, description) => {
 }
 
 // function that modifies the project name
-export const modifyProject = (name, projectId) => {
+export const modifyProject = (name, description, projectId) => {
     const project = projects.find(p => p.id === projectId);
     if(project){
         project.name = name;
+        project.description = description;
         saveToLocalStorage();
     }
 }
@@ -36,7 +37,7 @@ export const modifyProject = (name, projectId) => {
 export const deleteProject = (projectId) => {
     const projectIndex = projects.findIndex(p => p.id === projectId);
     if(projectIndex !== -1){
-        projects.splice(index, 1);
+        projects.splice(projectIndex, 1);
         saveToLocalStorage();
     }
 }
