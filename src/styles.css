@@ -9,7 +9,7 @@ body{
     height: 100vh;
 }
 
-.form{
+.form, .todo-form{
     display: flex;
     flex-direction: column;
     position: fixed;

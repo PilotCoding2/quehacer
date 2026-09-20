@@ -54,6 +54,7 @@ export const goToProject = (projectsArray, projectId, projectsContainer = projec
         individualProjectContainer.innerHTML = '';
         individualProjectContainer.innerHTML += `<button id="create-task">New Task</button>`
         individualProjectContainer.innerHTML += `<h2 id="project-name">${project.name}</h2>`
+        individualProjectContainer.id = projectId;
         if(project.description){
             individualProjectContainer.innerHTML += `<p id="project-description">${project.description}</p>`
         }
@@ -123,6 +124,25 @@ export const modifyProject = (projects, projectId, projectTitle, projectDescript
     }
 }
 
-// this function allows to modify the project name and description
+// function that creates a form to add todos
+export const createTodoForm = (individualProjectContainer) => {
+    individualProjectContainer.innerHTML += 
+    `
+    <div class="todo-form-container">
+        <form class="todo-form">
+            <h2 class="form-title">New Task</h2>
+            <label for="todo-name">Task Name:</label>
+            <input type="text" id="todo-name" name="todo-name" required>
+            <label for="todo-date">Task Date:</label>
+            <input type="date" id="todo-date" name="todo-date" required>
+            <label for="todo-desc">Descroption:</label>
+            <input type="text" id="todo-desc" name="todo-desc">
+        </form>        
+    </div>
+    `
+}
+
+
+    
 
 
