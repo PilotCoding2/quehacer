@@ -164,9 +164,9 @@ export const paintTodoInProjects = (projects, projectId, todoContainer) => {
                 todoContainer.innerHTML += 
                 `
                 <div class="todo-card" id="${todo.id}">
-                    <h2 class="todo-title">${todo.name}</h2>
-                    <p class="todo-due-date">${todo.todoDate}</p>
-                    <p class=todo-description">${todo.description}</p>
+                    <h2 class="todo-title" id="title-${todo.id}">${todo.name}</h2>
+                    <p class="todo-due-date" id="date-${todo.id}">${todo.todoDate}</p>
+                    <p class="todo-description" id="desc-${todo.id}">${todo.description}</p>
                     <button class="delete-todo">Delete</button>
                     <button class="edit-todo">Edit</button>
                 </div>
@@ -180,20 +180,20 @@ export const paintTodoInProjects = (projects, projectId, todoContainer) => {
     }
 }
 
-export const modifyTodos = (projects, projectId, todoId, todoContainer, editBtn, deleteBtn, todoTitle, todoDate, todoDesc) => {
+export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, todoTitle, todoDate, todoDesc) => {
     editBtn.remove();
     deleteBtn.remove();
 
     // creates an accept button
     const todoCard = document.getElementById(`${todoId}`);
     const acceptBtn = document.createElement('button');
-    acceptBtn.classList.add('accept-btn');
+    acceptBtn.classList.add('todo-accept-btn');
     acceptBtn.textContent = 'Accept';
     todoCard.appendChild(acceptBtn);
 
     // creates a cancel button
     const cancelBtn = document.createElement('button');
-    cancelBtn.classList.add('cancel-btn');
+    cancelBtn.classList.add('todo-cancel-btn');
     cancelBtn.textContent = 'Cancel';
     todoCard.appendChild(cancelBtn);
 
@@ -208,13 +208,13 @@ export const modifyTodos = (projects, projectId, todoId, todoContainer, editBtn,
             const dateLabel = document.createElement('label');
             const descLabel = document.createElement('label');
             // add the for and inner text
-            titleLabel.htmlFor(`title-${todoId}`);
+            titleLabel.htmlFor = `title-${todoId}`;
             titleLabel.textContent = 'Task Name';
 
-            dateLabel.htmlFor(`date-${todoId}`);
+            dateLabel.htmlFor = `date-${todoId}`;
             dateLabel.textContent = 'Task Due Date';
 
-            descLabel.htmlFor(`desc-${todoId}`);
+            descLabel.htmlFor = `desc-${todoId}`;
             descLabel.textContent = 'Task Description';
             // convert the text into inputs
             const titleText = todoTitle;
@@ -232,11 +232,23 @@ export const modifyTodos = (projects, projectId, todoId, todoContainer, editBtn,
             dateInput.value = dateText.textContent;
             dateText.replaceWith(dateInput);
             dateInput.before(dateLabel);
-
+            
+            const descText = todoDesc;
+            const descInput = document.createElement('input');
+            descInput.type = 'text';
+            descInput.id =  `desc-${todoId}`;
+            if(descText){
+                descInput.value = descText.textContent;
+                descText.replaceWith(descInput);
+                descInput.before(descLabel);
+            } else {
+                descInput.value = '';
+                dateInput.after(descInput);
+                descInput.before(descLabel);
+            }
 
         }
     }
-    
 }
 
 

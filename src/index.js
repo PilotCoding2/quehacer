@@ -105,7 +105,50 @@ individualProjectContainer.addEventListener('click', (event) => {
         LogicalController.deleteTodo(projectId, todoId);
         GUI.paintTodoInProjects(LogicalController.getProjects(), projectId, individualProjectContainer);
     }
-    
+    if(event.target.className === 'edit-todo'){
+        const card = event.target.closest('.todo-card');
+        const todoId = card.id;
+        const projectId = individualProjectContainer.id
+        const todoTitle = card.querySelector('.todo-title');  
+        const todoDate = card.querySelector('.todo-due-date');
+        const todoDesc = card.querySelector('.todo-description');
+        const editBtn = card.querySelector('.edit-todo');
+        const deleteBtn = card.querySelector('.delete-todo');
+        GUI.modifyTodos(LogicalController.getProjects(), projectId, todoId, editBtn, deleteBtn, todoTitle, todoDate, todoDesc);
+    }
+    if(event.target.className === 'todo-cancel-btn'){
+        GUI.paintTodoInProjects(LogicalController.getProjects(), individualProjectContainer.id, individualProjectContainer);
+    }
+    if(event.target.className === 'todo-accept-btn'){
+        const todoId = event.target.parentElement.id;
+        const projectId = individualProjectContainer.id;
+        const project = LogicalController.getProjects().find(p => p.id === projectId);
+        const todo = project.todos.find(t => t.id === todoId);
+        if(project){
+            if(todo){
+                const title = document.querySelector(`#title-${todoId}`);
+                const date =  document.querySelector(`#date-${todoId}`);
+                const desc = document.querySelector(`#desc-${todoId}`);
+
+                const trimmedTitle = title.value.trim();
+                if(!trimmedTitle){
+                    alert("The task title can't be empty");
+                    title.focus();
+                    return;
+                }
+
+                const isTitleChanged = trimmedTitle !== todo.name;
+                const isDateChanged = date.value !== (todo.todoDate || '');
+                const isDescChanged = desc.value !== (todo.description || '');
+                if(isTitleChanged || isDateChanged || isDescChanged){
+                    LogicalController.modifyTodo(trimmedTitle, date.value, desc.value, projectId, todoId);
+                    GUI.paintTodoInProjects(LogicalController.getProjects(), projectId, individualProjectContainer);
+                } else {
+                    GUI.paintTodoInProjects(LogicalController.getProjects(), projectId, individualProjectContainer);
+                }
+            }
+        }
+    }
 });
 
 homeBtn.addEventListener('click', () => {
