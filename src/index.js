@@ -14,7 +14,7 @@ window.addEventListener('load', (event) => {
     GUI.paintProjects(projectsContainer, LogicalController.getProjects());
 });
 
-projectsContainer.addEventListener('click', (event) => {
+document.body.addEventListener('click', (event) => {
     if(event.target.className === 'project-card'){
         GUI.goToProject(LogicalController.getProjects(), event.target.id, projectsContainer, individualProjectContainer);
     }
@@ -29,7 +29,7 @@ projectsContainer.addEventListener('click', (event) => {
             const name = formData.get("project-name");
             const desc = formData.get("project-desc");
             LogicalController.newProject(name, desc);
-            GUI.removeProjectsForm(formContainer);
+            GUI.removeForm(formContainer);
             GUI.paintProjects(projectsContainer, LogicalController.getProjects());
         });
     }
@@ -65,13 +65,34 @@ projectsContainer.addEventListener('click', (event) => {
             }
         }
     }
+    if(event.target.className === 'cancel-form'){
+        const formContainer = document.querySelector('.form');
+        GUI.removeForm(formContainer);
+    }
 });
 
 individualProjectContainer.addEventListener('click', (event) => {
     if(event.target.id === "create-task"){
         GUI.createTodoForm(individualProjectContainer);
+        const todoForm = document.querySelector('.todo-form');
+        const todoCreationFormContainer = document.querySelector('.todo-form-container');
+        todoForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const name = formData.get("todo-name");
+            const date = formData.get("todo-date");
+            const desc = formData.get("todo-desc");
+            LogicalController.addTodoToProjects(name, date, desc, individualProjectContainer.id);
+            GUI.removeForm(todoCreationFormContainer);
+            GUI.paintTodoInProjects(LogicalController.getProjects(), individualProjectContainer.id, individualProjectContainer);
+        });
     }
-})
+    if(event.target.className === "cancel-todo-form"){
+        const todoCreationFormContainer = document.querySelector('.todo-form-container');
+        GUI.removeForm(todoCreationFormContainer);
+    }
+    
+});
 
 homeBtn.addEventListener('click', () => {
     GUI.returnToProjects(LogicalController.getProjects(), projectsContainer, individualProjectContainer, homeBtn);

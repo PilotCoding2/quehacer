@@ -9,7 +9,7 @@ body{
     height: 100vh;
 }
 
-.form, .todo-form{
+.form, .todo-form-container{
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -20,7 +20,7 @@ body{
     background: #fff;
 }
 
-.project-creation-form{
+.project-creation-form, .todo-form{
     display: flex;
     flex-direction: column;
 }

@@ -7,6 +7,7 @@ export const addProjectsForm = () => {
     formBody.classList.add('form');
     formBody.innerHTML += 
     `
+    <button class="cancel-form">X</button>
     <form id="project-creation-form">
     <h3>Let's build a project</h3>
         <label for="name">Project name:</label>
@@ -19,8 +20,8 @@ export const addProjectsForm = () => {
     document.body.appendChild(formBody);
 }
 
-// this function allows to remove the project creation form
-export const removeProjectsForm = (form) => {
+// this function allows to remove forms
+export const removeForm = (form) => {
     form.remove();
 }
 
@@ -60,18 +61,8 @@ export const goToProject = (projectsArray, projectId, projectsContainer = projec
         }
         if(!project.todo){
             individualProjectContainer.innerHTML += '';
-        } else {
-             project.todo.forEach(todo => {
-                individualProjectContainer.innerHTML += 
-                `
-                <div id="${todo.id}" class="todo-card">
-                    <h2 class="task-name">${todo.name}</h2>
-                    <p class="task-date">${todo.todoDate}</p>
-                    <p class="task-desc">${todo.description}</p>
-                </div>
-                `
-            });
         }
+        paintTodoInProjects(projectsArray, projectId, individualProjectContainer);
     }
 }
 
@@ -104,12 +95,23 @@ export const modifyProject = (projects, projectId, projectTitle, projectDescript
     // filters the project
     const project = projects.find(p => p.id === projectId);
     if(project){
+        // adds the label for the title input
+        const titleLabel = document.createElement('label');
+        titleLabel.htmlFor = `title-${projectId}`;
+        titleLabel.classList.add('edit-input-label');
+        titleLabel.textContent = 'Project Name';
         // convert the h2 title into an input
         const title = projectTitle;
         const titleInput = document.createElement('input');
         titleInput.id = `title-${projectId}`;
         titleInput.value = title.textContent;
         title.replaceWith(titleInput);
+        titleInput.before(titleLabel);
+        // adds the label for the description input
+        const descLabel = document.createElement('label');
+        descLabel.htmlFor = `desc-${projectId}`;
+        descLabel.classList.add('edit-input-label');
+        descLabel.textContent = 'Description';
         // convert the description p into an input
         const description = projectDescription;
         const descriptionInput = document.createElement('input');
@@ -117,9 +119,11 @@ export const modifyProject = (projects, projectId, projectTitle, projectDescript
         if(description){
             descriptionInput.value = projectDescription.textContent;
             description.replaceWith(descriptionInput);
+            descriptionInput.before(descLabel);
         } else {
             descriptionInput.value = '';
             titleInput.after(descriptionInput);
+            descriptionInput.before(descLabel);
         }
     }
 }
@@ -129,17 +133,46 @@ export const createTodoForm = (individualProjectContainer) => {
     individualProjectContainer.innerHTML += 
     `
     <div class="todo-form-container">
+        <button class="cancel-todo-form">X</button>
         <form class="todo-form">
             <h2 class="form-title">New Task</h2>
             <label for="todo-name">Task Name:</label>
             <input type="text" id="todo-name" name="todo-name" required>
             <label for="todo-date">Task Date:</label>
             <input type="date" id="todo-date" name="todo-date" required>
-            <label for="todo-desc">Descroption:</label>
+            <label for="todo-desc">Description:</label>
             <input type="text" id="todo-desc" name="todo-desc">
+            <input type="submit" id="create-todo" value="Add Task">
         </form>        
     </div>
     `
+}
+
+// function that paints the currently viewed project todos
+export const paintTodoInProjects = (projects, projectId, todoContainer) => {
+    const project = projects.find(p => p.id === projectId);
+    if(project){
+        if(project.todos.length > 0){
+            const allTodoCards = document.querySelectorAll('.todo-card');
+            if(allTodoCards){
+                allTodoCards.forEach(card => {
+                    card.remove();
+                });
+            }
+            project.todos.forEach(todo => {
+                todoContainer.innerHTML += 
+                `
+                <div class="todo-card" id="${todo.id}">
+                    <h2 class="todo-title">${todo.name}</h2>
+                    <p class="todo-due-date">${todo.todoDate}</p>
+                    <p class=todo-description">${todo.description}</p>
+                    <button class="delete-todo">Delete</button>
+                    <button class="edit-todo">Edit</button>
+                </div>
+                `
+            });
+        }
+    }
 }
 
 
