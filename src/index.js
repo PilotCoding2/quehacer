@@ -55,13 +55,21 @@ document.body.addEventListener('click', (event) => {
         if(project){
             const title = document.querySelector(`#title-${projectId}`);
             const description = document.querySelector(`#desc-${projectId}`);
-            const isTitleChanged = title.value !== project.title;
+
+            const trimmedTitle = title.value.trim();
+
+            if(!trimmedTitle){
+                alert("The title name can't be empty.");
+                title.focus();
+                return;
+            }
+            const isTitleChanged = trimmedTitle !== project.name;
             const isDescriptionChanged = description.value !== (project.description || '');
             if(isTitleChanged || isDescriptionChanged){
-                LogicalController.modifyProject(title.value, description.value, projectId);
+                LogicalController.modifyProject(trimmedTitle, description.value, projectId);
                 GUI.paintProjects(projectsContainer, LogicalController.getProjects());
             } else {
-                return;
+                GUI.paintProjects(projectsContainer, LogicalController.getProjects());
             }
         }
     }
@@ -90,6 +98,12 @@ individualProjectContainer.addEventListener('click', (event) => {
     if(event.target.className === "cancel-todo-form"){
         const todoCreationFormContainer = document.querySelector('.todo-form-container');
         GUI.removeForm(todoCreationFormContainer);
+    }
+    if(event.target.className === 'delete-todo'){
+        const projectId = individualProjectContainer.id;
+        const todoId = event.target.parentElement.id;
+        LogicalController.deleteTodo(projectId, todoId);
+        GUI.paintTodoInProjects(LogicalController.getProjects(), projectId, individualProjectContainer);
     }
     
 });

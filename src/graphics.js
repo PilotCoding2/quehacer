@@ -151,6 +151,7 @@ export const createTodoForm = (individualProjectContainer) => {
 // function that paints the currently viewed project todos
 export const paintTodoInProjects = (projects, projectId, todoContainer) => {
     const project = projects.find(p => p.id === projectId);
+    const allTodoCards = document.querySelectorAll('.todo-card');
     if(project){
         if(project.todos.length > 0){
             const allTodoCards = document.querySelectorAll('.todo-card');
@@ -171,8 +172,71 @@ export const paintTodoInProjects = (projects, projectId, todoContainer) => {
                 </div>
                 `
             });
+        } else {
+            allTodoCards.forEach(card => {
+                card.remove();
+            })
         }
     }
+}
+
+export const modifyTodos = (projects, projectId, todoId, todoContainer, editBtn, deleteBtn, todoTitle, todoDate, todoDesc) => {
+    editBtn.remove();
+    deleteBtn.remove();
+
+    // creates an accept button
+    const todoCard = document.getElementById(`${todoId}`);
+    const acceptBtn = document.createElement('button');
+    acceptBtn.classList.add('accept-btn');
+    acceptBtn.textContent = 'Accept';
+    todoCard.appendChild(acceptBtn);
+
+    // creates a cancel button
+    const cancelBtn = document.createElement('button');
+    cancelBtn.classList.add('cancel-btn');
+    cancelBtn.textContent = 'Cancel';
+    todoCard.appendChild(cancelBtn);
+
+    // filters the todo and project
+    const project = projects.find(p => p.id === projectId);
+    if(project){
+        // filters the desired todo
+        const todo = project.todos.find(t => t.id === todoId);
+        if(todo){
+            // create labels for the todo elements
+            const titleLabel = document.createElement('label');
+            const dateLabel = document.createElement('label');
+            const descLabel = document.createElement('label');
+            // add the for and inner text
+            titleLabel.htmlFor(`title-${todoId}`);
+            titleLabel.textContent = 'Task Name';
+
+            dateLabel.htmlFor(`date-${todoId}`);
+            dateLabel.textContent = 'Task Due Date';
+
+            descLabel.htmlFor(`desc-${todoId}`);
+            descLabel.textContent = 'Task Description';
+            // convert the text into inputs
+            const titleText = todoTitle;
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.id = `title-${todoId}`;
+            titleInput.value = titleText.textContent;
+            titleText.replaceWith(titleInput);
+            titleInput.before(titleLabel);
+
+            const dateText = todoDate;
+            const dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            dateInput.id = `date-${todoId}`;
+            dateInput.value = dateText.textContent;
+            dateText.replaceWith(dateInput);
+            dateInput.before(dateLabel);
+
+
+        }
+    }
+    
 }
 
 

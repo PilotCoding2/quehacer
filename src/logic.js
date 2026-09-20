@@ -69,7 +69,7 @@ export const deleteTodo = (projectId, todoId) => {
     const todoIndex = project.todos.findIndex(t => t.id === todoId);
     if(project && todoIndex !== -1){
         project.todos.splice(todoIndex, 1);
-        saveToLocalStorage()
+        saveToLocalStorage();
     }
 }
 
