@@ -25,7 +25,7 @@ export const newProject = (name, description) => {
 
 // function that modifies the project name
 export const modifyProject = (name, description, projectId) => {
-    const project = projects.find(p => p.id === projectId);
+    const project = returnProject(projectId);
     if(project){
         project.name = name;
         project.description = description;
@@ -43,37 +43,55 @@ export const deleteProject = (projectId) => {
 }
 
 // function that looks for the project and pushes the todo info
-export const addTodoToProjects = (name, todoDate, description, projectId) => {
-    const project = projects.find(p => p.id === projectId);
+export const addTodoToProjects = (name, todoDate, description, urgency, projectId) => {
+    const project = returnProject(projectId);
     if(project){
-        project.todos.push({ id: crypto.randomUUID(), name, todoDate, description });
+        project.todos.push({ id: crypto.randomUUID(), name, todoDate, description, urgency, completed: false });
+        sortTodos(projectId);
         saveToLocalStorage();
     }
 }
 
 // function that allows to modify the todo parameters after it is created
-export const modifyTodo = (name, todoDate, description, projectId, todoId) => {
-    const project = projects.find(p => p.id === projectId);
+export const modifyTodo = (name, todoDate, description, urgency, projectId, todoId) => {
+    const project = returnProject(projectId);
     const todo = project.todos.find(t => t.id === todoId);
-    if(project && todo){
+    if(todo){
         todo.name = name;
         todo.todoDate = todoDate;
         todo.description = description;
+        todo.urgency = urgency;
+        sortTodos(projectId);
         saveToLocalStorage();
     }
 }
 
 // function that allows to delete a todo inside a project
 export const deleteTodo = (projectId, todoId) => {
-    const project = projects.find(p => p.id === projectId);
+    const project = returnProject(projectId);
     const todoIndex = project.todos.findIndex(t => t.id === todoId);
     if(project && todoIndex !== -1){
         project.todos.splice(todoIndex, 1);
+        sortTodos(projectId);
         saveToLocalStorage();
+    }
+}
+
+// function that sorts the todos inside a project
+export const sortTodos = (projectId) => {
+    const project = returnProject(projectId);
+    if(project){
+        project.todos.sort((a, b) => (
+            a.urgency > b.urgency ? 1 : b.urgency > a.urgency ? -1 : 0));
     }
 }
 
 // function that saves to localStorage
 const saveToLocalStorage = () => {
     localStorage.setItem("projects", JSON.stringify(projects));
+}
+
+// function that returns the desired project
+const returnProject = (projectId) => {
+    return projects.find(p => p.id === projectId);
 }

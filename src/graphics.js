@@ -142,6 +142,13 @@ export const createTodoForm = (individualProjectContainer) => {
             <input type="date" id="todo-date" name="todo-date" required>
             <label for="todo-desc">Description:</label>
             <input type="text" id="todo-desc" name="todo-desc">
+            <label for="todo-urgency">Task Priority</label>
+            <select name="todo-urgency" id="todo-urgency">
+                <option value="1">Urgent</option>
+                <option value="2">Important</option>
+                <option value="3">Relevant</option>
+                <option value="4">Low Priority</option>
+            </select>
             <input type="submit" id="create-todo" value="Add Task">
         </form>        
     </div>
@@ -163,7 +170,7 @@ export const paintTodoInProjects = (projects, projectId, todoContainer) => {
             project.todos.forEach(todo => {
                 todoContainer.innerHTML += 
                 `
-                <div class="todo-card" id="${todo.id}">
+                <div class="todo-card priority-${todo.urgency}" id="${todo.id}">
                     <h2 class="todo-title" id="title-${todo.id}">${todo.name}</h2>
                     <p class="todo-due-date" id="date-${todo.id}">${todo.todoDate}</p>
                     <p class="todo-description" id="desc-${todo.id}">${todo.description}</p>
@@ -180,7 +187,7 @@ export const paintTodoInProjects = (projects, projectId, todoContainer) => {
     }
 }
 
-export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, todoTitle, todoDate, todoDesc) => {
+export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, todoTitle, todoDate, todoDesc, todoUrgency) => {
     editBtn.remove();
     deleteBtn.remove();
 
@@ -207,6 +214,8 @@ export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, tod
             const titleLabel = document.createElement('label');
             const dateLabel = document.createElement('label');
             const descLabel = document.createElement('label');
+            const urgencyLabel = document.createElement('label');
+
             // add the for and inner text
             titleLabel.htmlFor = `title-${todoId}`;
             titleLabel.textContent = 'Task Name';
@@ -216,6 +225,10 @@ export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, tod
 
             descLabel.htmlFor = `desc-${todoId}`;
             descLabel.textContent = 'Task Description';
+
+            urgencyLabel.htmlFor = `urgency-${todoId}`;
+            urgencyLabel.textContent = 'Task Urgency';
+
             // convert the text into inputs
             const titleText = todoTitle;
             const titleInput = document.createElement('input');
@@ -247,6 +260,19 @@ export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, tod
                 descInput.before(descLabel);
             }
 
+            const urgencyInput = document.createElement('select');
+            const urgent = new Option('Urgent', 1);
+            const important = new Option('Important', 2);
+            const relevant = new Option('Relevant', 3);
+            const lowPriority = new Option('Low Priority', 4);
+
+            urgencyInput.add(urgent);
+            urgencyInput.add(important);
+            urgencyInput.add(relevant);
+            urgencyInput.add(lowPriority);
+
+            descInput.after(urgencyInput);
+            urgencyInput.before(urgencyLabel);
         }
     }
 }

@@ -15,6 +15,14 @@
     --radius-lg: 16px;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    --urgency-1-border: #ef4444;
+    --urgency-1-bg: #fef2f2;
+    --urgency-2-border: #f97316;
+    --urgency-2-bg: #fff7ed;
+    --urgency-3-border: #3b82f6;
+    --urgency-3-bg: #EFF6FF;
+    --urgency-4-border: #CBD5E1;
+    --urgerncy-4-bg: #ffffff;
 }
 
 *{
@@ -242,5 +250,49 @@ input[type="text"]:focus, input[type="date"]:focus{
         grid-column: 3 / 4;
     }
 
-    
+}
+
+select{
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background-color: var(--bg-main);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+    appearance: none;
+    --webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;   
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.2rem;
+}
+
+select:focus{
+    border-color: var(--primary);
+    background-color: #ffffff;
+}   
+
+.todo-card.priority-1{
+    border-left: 6px solid var(--urgency-1-border);
+    background-color: var(--urgency-1-bg);
+}
+
+.todo-card.priority-2{
+    border-left: 6px solid var(--urgency-2-border);
+    background-color: var(--urgency-2-bg);
+}
+
+.todo-card.priority-3{
+    border-left: 6px solid var(--urgency-3-border);
+    background-color: var(--urgency-3-bg);
+}
+
+.todo-card.priority-4{
+    border-left: 6px solid var(--urgency-4-border);
+    background-color: var(--urgency-4-border);
 }

@@ -90,7 +90,8 @@ individualProjectContainer.addEventListener('click', (event) => {
             const name = formData.get("todo-name");
             const date = formData.get("todo-date");
             const desc = formData.get("todo-desc");
-            LogicalController.addTodoToProjects(name, date, desc, individualProjectContainer.id);
+            const urgency = formData.get("todo-urgency");
+            LogicalController.addTodoToProjects(name, date, desc, urgency, individualProjectContainer.id);
             GUI.removeForm(todoCreationFormContainer);
             GUI.paintTodoInProjects(LogicalController.getProjects(), individualProjectContainer.id, individualProjectContainer);
         });
@@ -129,6 +130,7 @@ individualProjectContainer.addEventListener('click', (event) => {
                 const title = document.querySelector(`#title-${todoId}`);
                 const date =  document.querySelector(`#date-${todoId}`);
                 const desc = document.querySelector(`#desc-${todoId}`);
+                const urgency = document.querySelector(`#urgency-${todoId}`);
 
                 const trimmedTitle = title.value.trim();
                 if(!trimmedTitle){
@@ -141,7 +143,7 @@ individualProjectContainer.addEventListener('click', (event) => {
                 const isDateChanged = date.value !== (todo.todoDate || '');
                 const isDescChanged = desc.value !== (todo.description || '');
                 if(isTitleChanged || isDateChanged || isDescChanged){
-                    LogicalController.modifyTodo(trimmedTitle, date.value, desc.value, projectId, todoId);
+                    LogicalController.modifyTodo(trimmedTitle, date.value, desc.value, urgency.value, projectId, todoId);
                     GUI.paintTodoInProjects(LogicalController.getProjects(), projectId, individualProjectContainer);
                 } else {
                     GUI.paintTodoInProjects(LogicalController.getProjects(), projectId, individualProjectContainer);
