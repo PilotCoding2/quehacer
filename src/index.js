@@ -109,7 +109,7 @@ individualProjectContainer.addEventListener('click', (event) => {
     if(event.target.className === 'edit-todo'){
         const card = event.target.closest('.todo-card');
         const todoId = card.id;
-        const projectId = individualProjectContainer.id
+        const projectId = individualProjectContainer.id;
         const todoTitle = card.querySelector('.todo-title');  
         const todoDate = card.querySelector('.todo-due-date');
         const todoDesc = card.querySelector('.todo-description');
@@ -142,7 +142,8 @@ individualProjectContainer.addEventListener('click', (event) => {
                 const isTitleChanged = trimmedTitle !== todo.name;
                 const isDateChanged = date.value !== (todo.todoDate || '');
                 const isDescChanged = desc.value !== (todo.description || '');
-                if(isTitleChanged || isDateChanged || isDescChanged){
+                const isUrgencyChanged = urgency !== todo.urgency;
+                if(isTitleChanged || isDateChanged || isDescChanged || isUrgencyChanged){
                     LogicalController.modifyTodo(trimmedTitle, date.value, desc.value, urgency.value, projectId, todoId);
                     GUI.paintTodoInProjects(LogicalController.getProjects(), projectId, individualProjectContainer);
                 } else {
@@ -150,6 +151,14 @@ individualProjectContainer.addEventListener('click', (event) => {
                 }
             }
         }
+    }
+    if(event.target.className === 'todo-checkbox'){
+        const card = event.target.closest('.todo-card');
+        const todoId = card.id;
+        const projectId = individualProjectContainer.id;
+        const checkBtn = document.querySelector(`#checked-${todoId}`);
+        LogicalController.checkUncheckTodo(projectId, todoId, checkBtn);
+        GUI.graphicalCheckUncheck(LogicalController.getProjects(), projectId, checkBtn, individualProjectContainer);
     }
 });
 

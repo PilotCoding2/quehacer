@@ -86,6 +86,27 @@ export const sortTodos = (projectId) => {
     }
 }
 
+// function that checks the todo as done
+export const checkUncheckTodo = (projectId, todoId, checkBtn) => {
+    const isBtnChecked = checkBtn.checked;
+    const project = returnProject(projectId);
+    if(project){
+        const todo = project.todos.find(t => t.id === todoId);
+        const currentUrgency = todo.urgency;
+        if(isBtnChecked){
+            todo.completed = isBtnChecked;
+            todo.urgency = 5;
+            saveToLocalStorage();
+        } else {
+            todo.completed = isBtnChecked;
+            todo.urgency = currentUrgency;
+            saveToLocalStorage();
+        }
+        
+       
+    }
+}
+
 // function that saves to localStorage
 const saveToLocalStorage = () => {
     localStorage.setItem("projects", JSON.stringify(projects));

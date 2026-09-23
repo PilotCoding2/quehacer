@@ -171,6 +171,7 @@ export const paintTodoInProjects = (projects, projectId, todoContainer) => {
                 todoContainer.innerHTML += 
                 `
                 <div class="todo-card priority-${todo.urgency}" id="${todo.id}">
+                    <input type="checkbox" id="checked-${todo.id}" class="todo-checkbox">
                     <h2 class="todo-title" id="title-${todo.id}">${todo.name}</h2>
                     <p class="todo-due-date" id="date-${todo.id}">${todo.todoDate}</p>
                     <p class="todo-description" id="desc-${todo.id}">${todo.description}</p>
@@ -187,7 +188,7 @@ export const paintTodoInProjects = (projects, projectId, todoContainer) => {
     }
 }
 
-export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, todoTitle, todoDate, todoDesc, todoUrgency) => {
+export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, todoTitle, todoDate, todoDesc) => {
     editBtn.remove();
     deleteBtn.remove();
 
@@ -261,6 +262,7 @@ export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, tod
             }
 
             const urgencyInput = document.createElement('select');
+            urgencyInput.id = `urgency-${todoId}`;
             const urgent = new Option('Urgent', 1);
             const important = new Option('Important', 2);
             const relevant = new Option('Relevant', 3);
@@ -273,11 +275,23 @@ export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, tod
 
             descInput.after(urgencyInput);
             urgencyInput.before(urgencyLabel);
+            urgencyInput.value = todo.urgency;
         }
     }
 }
 
-
+export const graphicalCheckUncheck = (project, projectId, checkBtn, individualProjectContainer) => {
+    const isBtnChecked = checkBtn.checked;
+    const prefix = 'priority';
+    const classes = individualProjectContainer.className.split(' ').filter(c => !c.startsWith(prefix));
+    if(isBtnChecked){
+        individualProjectContainer.className = classes.join(' ').trim();
+        individualProjectContainer.classList.add('project-checked');
+    } else {
+        individualProjectContainer.classList.remove('project-checked');
+        paintTodoInProjects(project, projectId, individualProjectContainer);
+    }
+}
     
 
 
