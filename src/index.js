@@ -157,8 +157,9 @@ individualProjectContainer.addEventListener('click', (event) => {
         const todoId = card.id;
         const projectId = individualProjectContainer.id;
         const checkBtn = document.querySelector(`#checked-${todoId}`);
+        const todoContainer = document.getElementById(`${todoId}`);
         LogicalController.checkUncheckTodo(projectId, todoId, checkBtn);
-        GUI.graphicalCheckUncheck(LogicalController.getProjects(), projectId, checkBtn, individualProjectContainer);
+        GUI.paintTodoInProjects(LogicalController.getProjects(), projectId, individualProjectContainer);
     }
 });
 

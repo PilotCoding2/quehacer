@@ -81,10 +81,14 @@ export const deleteTodo = (projectId, todoId) => {
 export const sortTodos = (projectId) => {
     const project = returnProject(projectId);
     if(project){
-        project.todos.sort((a, b) => (
-            a.urgency > b.urgency ? 1 : b.urgency > a.urgency ? -1 : 0));
+        project.todos.sort((a, b) => {
+            if(a.completed !== b.completed){
+                return a.completed ? 1 : -1;
+            }
+            return a.urgency > b.urgency ? 1 : b.urgency > a.urgency ? -1 : 0;
+        })
     }
-}
+};
 
 // function that checks the todo as done
 export const checkUncheckTodo = (projectId, todoId, checkBtn) => {
@@ -92,14 +96,13 @@ export const checkUncheckTodo = (projectId, todoId, checkBtn) => {
     const project = returnProject(projectId);
     if(project){
         const todo = project.todos.find(t => t.id === todoId);
-        const currentUrgency = todo.urgency;
         if(isBtnChecked){
             todo.completed = isBtnChecked;
-            todo.urgency = 5;
+            sortTodos(projectId);
             saveToLocalStorage();
         } else {
             todo.completed = isBtnChecked;
-            todo.urgency = currentUrgency;
+            sortTodos(projectId);
             saveToLocalStorage();
         }
         

@@ -168,17 +168,32 @@ export const paintTodoInProjects = (projects, projectId, todoContainer) => {
                 });
             }
             project.todos.forEach(todo => {
-                todoContainer.innerHTML += 
-                `
-                <div class="todo-card priority-${todo.urgency}" id="${todo.id}">
-                    <input type="checkbox" id="checked-${todo.id}" class="todo-checkbox">
-                    <h2 class="todo-title" id="title-${todo.id}">${todo.name}</h2>
-                    <p class="todo-due-date" id="date-${todo.id}">${todo.todoDate}</p>
-                    <p class="todo-description" id="desc-${todo.id}">${todo.description}</p>
-                    <button class="delete-todo">Delete</button>
-                    <button class="edit-todo">Edit</button>
-                </div>
-                `
+                if(todo.completed){
+                    todoContainer.innerHTML += 
+                    `
+                    <div class="todo-card project-checked" id="${todo.id}">
+                        <input type="checkbox" id="checked-${todo.id}" class="todo-checkbox" checked>
+                        <h2 class="todo-title" id="title-${todo.id}">${todo.name}</h2>
+                        <p class="todo-due-date" id="date-${todo.id}">${todo.todoDate}</p>
+                        <p class="todo-description" id="desc-${todo.id}">${todo.description}</p>
+                        <button class="delete-todo">Delete</button>
+                        <button class="edit-todo">Edit</button>
+                    </div>
+                    `
+                } else {
+                    todoContainer.innerHTML += 
+                    `
+                    <div class="todo-card priority-${todo.urgency}" id="${todo.id}">
+                        <input type="checkbox" id="checked-${todo.id}" class="todo-checkbox">
+                        <h2 class="todo-title" id="title-${todo.id}">${todo.name}</h2>
+                        <p class="todo-due-date" id="date-${todo.id}">${todo.todoDate}</p>
+                        <p class="todo-description" id="desc-${todo.id}">${todo.description}</p>
+                        <button class="delete-todo">Delete</button>
+                        <button class="edit-todo">Edit</button>
+                    </div>
+                    `
+                }
+                
             });
         } else {
             allTodoCards.forEach(card => {
@@ -280,18 +295,5 @@ export const modifyTodos = (projects, projectId, todoId, editBtn, deleteBtn, tod
     }
 }
 
-export const graphicalCheckUncheck = (project, projectId, checkBtn, individualProjectContainer) => {
-    const isBtnChecked = checkBtn.checked;
-    const prefix = 'priority';
-    const classes = individualProjectContainer.className.split(' ').filter(c => !c.startsWith(prefix));
-    if(isBtnChecked){
-        individualProjectContainer.className = classes.join(' ').trim();
-        individualProjectContainer.classList.add('project-checked');
-    } else {
-        individualProjectContainer.classList.remove('project-checked');
-        paintTodoInProjects(project, projectId, individualProjectContainer);
-    }
-}
-    
 
 
